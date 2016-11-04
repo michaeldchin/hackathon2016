@@ -8,16 +8,23 @@ $(document).ready(function () {
     });    
 
     function drawTable(data) {
-        var gst_avg = 0; 
+        var gst_avg_obj = {};
+		
         for (var i = 0; i < data.info.length; i++) {
             if (data.info[i].LEVEL_CD == "R" && data.info[i].LEVEL_VALUE == "GST")
-                gst_avg = data.info[i].RTL_PER_OBJ;
+			{
+                gst_avg_obj.gst_nv_obj_per = data.info[i].RTL_PER_OBJ;
+				gst_avg_obj.gst_nv_per_py = data.info[i].PY_PER;
+				gst_avg_obj.gst_nv_turn = data.info[i].TURN_RATE;
+				gst_avg_obj.gst_ls_pen_per = data.info[i].LEASE_PER;
+				gst_avg_obj.gst_tcuv_obj_per = data.info[i].TCUV_PER_OBJ;
+			}
         }
 
         for (var i = 0; i < data.info.length; i++) {
 
-            drawRow(data.info[i], i, gst_avg);
-            addDetails(data.info[i], i);
+            drawRow(data.info[i], i, gst_avg_obj.gst_nv_obj_per);
+            addDetails(data.info[i], i, gst_avg_obj);
         }
     }
 
@@ -46,7 +53,7 @@ $(document).ready(function () {
         }
     }
 
-    function addDetails(rowData, num) {
+    function addDetails(rowData, num, gst_avg_object) {
         console.log("addDetails " + num);
 
         $("#mainBody").append(
@@ -61,11 +68,11 @@ $(document).ready(function () {
                             <p>% GST: " + rowData.RTL_PER_GST + "</p> \
                             <p>Obj: " + rowData.RTL_OBJECTIVE + "</p> \
                             <p>+/-: " + rowData.RTL_OBJ_DELTA + "</p> \
-                            <p>Obj %: " + rowData.RTL_PER_OBJ + "</p> \
+                            <p id='nv-obj-per_" + num + "'>Obj %: " + rowData.RTL_PER_OBJ + "</p> \
                             <p>PGM: " + rowData.PGM_SLS_MTD + "</p> \
                             <p>PY: " + rowData.PREV_RTL_MTD + "</p> \
-                            <p>% PY: " + rowData.PY_PER + "</p> \
-                            <p>TURN: " + rowData.TURN_RATE + "</p> \
+                            <p id='nv-per-py_" + num + "'>% PY: " + rowData.PY_PER + "</p> \
+                            <p id='nv-turn_'" + num + "'>TURN: " + rowData.TURN_RATE + "</p> \
                     </div> \
                     <div class='col-xs-6'> \
                         <h2>Stock</h2> \
@@ -77,17 +84,28 @@ $(document).ready(function () {
                     <div class='col-xs-6'> \
                         <h2>Lease Sales</h2> \
                             <p>MTD: " + rowData.LEASE_MTD_TODAY + "</p> \
-                            <p>Pen %: " + rowData.LEASE_PER + "</p> \
+                            <p id='ls-pen-per_" + num + "'>Pen %: " + rowData.LEASE_PER + "</p> \
                     </div> \
                     <div class='col-xs-6'> \
                         <h2>TCUV Sales</h2> \
                             <p>MTD: " + rowData.TCUV_MTD_TODAY + "</p> \
                             <p>Obj: " + rowData.TCUV_OBJECTIVE + "</p> \
-                            <p>Obj %: " + rowData.TCUV_PER_OBJ + "</p> \
+                            <p id='tcuv-obj-per_" + num + "'>Obj %: " + rowData.TCUV_PER_OBJ + "</p> \
                     </div> \
                 </div> \
             </div>"
         );
+		
+		if(rowData.RTL_PER_OBJ < gst_avg_object.gst_nv_obj_per)
+			$("#nv-obj-per_" + num).css({"color": "#FF0000"});
+		if(rowData.PY_PER < gst_avg_object.gst_nv_per_py)
+			$("#nv-per-py_" + num).css({"color": "#FF0000"});
+		if(rowData.TURN_RATE < gst_avg_object.gst_nv_turn)
+			$("#nv-turn_" + num).css({"color": "#FF0000"});
+		if(rowData.LEASE_PER < gst_avg_object.gst_ls_pen_per)
+			$("#ls-pen-per_" + num).css({"color": "#FF0000"});
+		if(rowData.TCUV_PER_OBJ < gst_avg_object.gst_tcuv_obj_per)
+			$("#tcuv-obj-per_" + num).css({"color": "#FF0000"});
 
 
     }
