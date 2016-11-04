@@ -2,20 +2,26 @@
 $(document).ready(function () {
     // JSON cannot be loaded from a local file
     // Hosted the example JSON on a free website
-    $.getJSON("https://api.myjson.com/bins/3ofhy", function(json) {
+    // $.getJSON("https://api.myjson.com/bins/3ofhy", function(json) {
+    $.getJSON("https://api.myjson.com/bins/odwy", function(json) {
         drawTable(json);
     });    
 
     function drawTable(data) {
+        var gst_avg = 0; 
+        for (var i = 0; i < data.info.length; i++) {
+            if (data.info[i].LEVEL_CD == "R" && data.info[i].LEVEL_VALUE == "GST")
+                gst_avg = data.info[i].RTL_PER_OBJ;
+        }
 
         for (var i = 0; i < data.info.length; i++) {
-            drawRow(data.info[i], i);
+
+            drawRow(data.info[i], i, gst_avg);
             addDetails(data.info[i], i);
         }
     }
 
-    function drawRow(rowData, num) {
-        var gst_avg = 3.6;
+    function drawRow(rowData, num, gst_avg) {
         var row = $("<tr />");
 
         $("#dataTable").append(row);
