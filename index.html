@@ -22,7 +22,7 @@
 <html>
 
 <head>
-	<title>Hello World</title>
+	<title>Mobile Barometer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 
@@ -45,13 +45,22 @@
 
 <body id="mainBody">
 	<div class="container" data-role="page" id="home">
+        <div class="dropdown" id="json-sources">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Different Data Sources
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li id="odwy">GST Internal</li>
+            <li id="3ofhy">Area 01 - Dist B</li>
+            <li id="3o056">All Dealers</li>
+          </ul>
+        </div>
 		<div data-role="body">
 			<h3>Business Barometer</h3>
 
 			<div class="row">
 				<input type="text" id="myInput" onkeyup="filterData()" placeholder="Search for district/area..." title="Type in a district/area">
 			</div>
-			<div class="row">
+			<div id="row2">
 				<table id="dataTable" class="table table-bordered table-responsive">
 					<thead>
 						<tr>
